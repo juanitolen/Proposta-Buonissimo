@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Buonissimo – Pixel Fluent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== VARIABLES ===== */
+:root {
+  --bg:          #07090F;
+  --bg2:         #0B0E19;
+  --gold:        #C9A962;
+  --gold2:       #DBBF7A;
+  --gold-dim:    rgba(201,169,98,0.09);
+  --gold-border: rgba(201,169,98,0.18);
+  --red:         #C4423E;
+  --red-dim:     rgba(196,66,62,0.09);
+  --text:        #EEEEF2;
+  --text2:       rgba(238,238,242,0.45);
+  --text3:       rgba(238,238,242,0.20);
+  --glass:       rgba(255,255,255,0.03);
+  --glass2:      rgba(255,255,255,0.06);
+  --border:      rgba(255,255,255,0.07);
+  --border2:     rgba(255,255,255,0.13);
+  --shadow:      0 4px 32px rgba(0,0,0,0.5);
+  --glow:        0 0 40px rgba(201,169,98,0.08);
+  --radius:      14px;
+}
+
+/* ===== RESET ===== */
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'DM Sans',sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== LIQUID BLOBS ===== */
+.blob {
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  pointer-events:none;
+  will-change:transform,border-radius;
+}
+.blob-gold { background:radial-gradient(circle,rgba(201,169,98,0.22) 0%,transparent 70%); }
+.blob-red  { background:radial-gradient(circle,rgba(196,66,62,0.18) 0%,transparent 70%); }
+.blob-blue { background:radial-gradient(circle,rgba(50,80,200,0.13) 0%,transparent 70%); }
+
+@keyframes blob1 {
+  0%,100% { transform:translate(0,0) scale(1);         border-radius:60% 40% 70% 30%/40% 50% 60% 50%; }
+  25%     { transform:translate(40px,-30px) scale(1.08); border-radius:40% 60% 30% 70%/60% 40% 50% 60%; }
+  50%     { transform:translate(20px,40px) scale(0.95);  border-radius:70% 30% 60% 40%/30% 60% 40% 70%; }
+  75%     { transform:translate(-30px,10px) scale(1.03); border-radius:50% 50% 40% 60%/50% 40% 60% 40%; }
+}
+@keyframes blob2 {
+  0%,100% { transform:translate(0,0) scale(1);          border-radius:40% 60% 50% 50%/60% 40% 60% 40%; }
+  33%     { transform:translate(-50px,30px) scale(1.1);  border-radius:60% 40% 40% 60%/40% 60% 30% 70%; }
+  66%     { transform:translate(30px,-40px) scale(0.9);  border-radius:30% 70% 60% 40%/50% 30% 70% 50%; }
+}
+@keyframes blob3 {
+  0%,100% { transform:translate(0,0) scale(1);           border-radius:50% 50% 60% 40%/30% 70% 50% 50%; }
+  40%     { transform:translate(60px,20px) scale(1.06);   border-radius:70% 30% 40% 60%/60% 40% 70% 30%; }
+  80%     { transform:translate(-20px,-50px) scale(0.93); border-radius:40% 60% 70% 30%/70% 30% 40% 60%; }
+}
+.anim1 { animation:blob1 16s ease-in-out infinite; }
+.anim2 { animation:blob2 20s ease-in-out infinite; }
+.anim3 { animation:blob3 13s ease-in-out infinite; }
+
+/* ===== WAVE DIVIDERS ===== */
+.wave { line-height:0; overflow:hidden; }
+.wave svg { display:block; width:100%; }
+
+/* ===== NAVBAR ===== */
+nav {
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  background:rgba(7,9,15,0.80);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner {
+  max-width:1140px;
+  margin:0 auto;
+  padding:0 24px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.nav-logo {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+.nav-logo-box {
+  width:34px; height:34px;
+  border-radius:8px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+.nav-logo-box img { width:100%; height:100%; object-fit:cover; display:block; }
+.nav-logo-name {
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+.nav-logo-name span { font-weight:300; opacity:0.30; }
+.nav-links { display:flex; gap:2px; list-style:none; }
+.nav-links a {
+  font-size:11.5px;
+  font-weight:500;
+  color:var(--text2);
+  text-decoration:none;
+  padding:6px 11px;
+  border-radius:6px;
+  transition:color .2s,background .2s;
+  white-space:nowrap;
+}
+.nav-links a:hover { color:var(--gold2); background:var(--gold-dim); }
+.nav-cta {
+  background:linear-gradient(135deg,var(--red),var(--gold)) !important;
+  color:#fff !important;
+  font-weight:600 !important;
+  opacity:1 !important;
+}
+.nav-cta:hover { filter:brightness(1.1) !important; }
+.hamburger {
+  display:none;
+  flex-direction:column;
+  gap:5px;
+  cursor:pointer;
+  padding:6px;
+  border:none;
+  background:none;
+}
+.hamburger span {
+  width:22px; height:2px;
+  background:rgba(255,255,255,0.55);
+  border-radius:2px;
+  transition:all .3s;
+}
+.mobile-menu {
+  display:none;
+  position:fixed;
+  top:60px; left:0; right:0;
+  background:rgba(7,9,15,0.97);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  z-index:99;
+  padding:16px 24px 20px;
+}
+.mobile-menu.open { display:block; }
+.mobile-menu ul { list-style:none; }
+.mobile-menu a {
+  display:block;
+  padding:12px 0;
+  font-size:14px;
+  font-weight:500;
+  color:var(--text2);
+  text-decoration:none;
+  border-bottom:1px solid var(--border);
+  transition:color .2s;
+}
+.mobile-menu a:hover { color:var(--gold2); }
+.mobile-menu .nav-cta {
+  margin-top:12px;
+  display:block;
+  padding:13px 24px;
+  background:linear-gradient(135deg,var(--red),var(--gold));
+  color:#fff;
+  border-radius:8px;
+  font-weight:600;
+  text-align:center;
+  width:100%;
+}
+
+/* ===== HERO ===== */
+#hero {
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  padding-top:60px;
+  background:var(--bg);
+}
+.hero-bg-wrap {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  z-index:0;
+}
+.hero-bg-video {
+  position:absolute;
+  inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:center 30%;
+}
+.hero-overlay {
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(
+    105deg,
+    rgba(0,0,0,0.50) 0%,
+    rgba(0,0,0,0.30) 36%,
+    rgba(0,0,0,0.10) 62%,
+    rgba(0,0,0,0.02) 100%
+  );
+}
+.hero-blob1 { width:700px; height:700px; top:-200px; right:-150px; opacity:.16; z-index:2; }
+.hero-blob2 { width:500px; height:500px; bottom:-100px; left:-100px; opacity:.12; z-index:2; }
+.hero-inner {
+  max-width:1140px;
+  margin:0 auto;
+  padding:80px 24px;
+  position:relative;
+  z-index:3;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+.hero-tag {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--gold-border);
+  background:var(--gold-dim);
+  border-radius:40px;
+  padding:6px 16px;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gold2);
+  margin-bottom:28px;
+}
+.hero-tag::before {
+  content:'';
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--gold);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.3; transform:scale(.65); }
+}
+.hero-slogan {
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  font-weight:300;
+  font-style:italic;
+  color:var(--gold2);
+  margin-bottom:12px;
+  letter-spacing:.8px;
+  opacity:.75;
+}
+.hero-title {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(40px,5.5vw,66px);
+  font-weight:700;
+  line-height:1.05;
+  color:#fff;
+  letter-spacing:-1.5px;
+  margin-bottom:2px;
+}
+.hero-title-accent {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(40px,5.5vw,66px);
+  font-weight:800;
+  line-height:1.05;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-1.5px;
+  margin-bottom:14px;
+}
+.hero-cliente {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(24px,3.5vw,40px);
+  font-weight:300;
+  color:rgba(255,255,255,0.20);
+  margin-bottom:22px;
+}
+.hero-line {
+  width:36px; height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--red));
+  border-radius:2px;
+  margin-bottom:20px;
+}
+.hero-desc {
+  font-size:15px;
+  font-weight:400;
+  color:rgba(255,255,255,0.42);
+  line-height:1.85;
+  max-width:400px;
+  margin-bottom:28px;
+}
+.hero-pills { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:36px; }
+.hero-pill {
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:5px 12px;
+  border-radius:4px;
+  border:1px solid var(--border);
+  color:var(--text3);
+}
+.hero-actions { display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:13px 26px;
+  background:linear-gradient(135deg,var(--red),var(--gold));
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  border-radius:8px;
+  text-decoration:none;
+  letter-spacing:.3px;
+  transition:filter .2s,transform .2s;
+  box-shadow:0 4px 24px rgba(196,66,62,0.25);
+}
+.btn-primary:hover { filter:brightness(1.12); transform:translateY(-2px); }
+.btn-secondary {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:13px 26px;
+  border:1px solid var(--border2);
+  color:var(--text2);
+  font-size:13px;
+  font-weight:500;
+  border-radius:8px;
+  text-decoration:none;
+  transition:border-color .2s,color .2s;
+}
+.btn-secondary:hover { border-color:var(--gold-border); color:var(--gold2); }
+
+/* hero right card */
+.hero-card {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;
+  padding:28px;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+.hero-card-title {
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+}
+.hero-stat {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.hero-stat:last-child { border-bottom:none; }
+.hero-stat-icon {
+  width:38px; height:38px;
+  border-radius:10px;
+  background:var(--gold-dim);
+  border:1px solid var(--gold-border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+}
+.hero-stat-label {
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:3px;
+}
+.hero-stat-val {
+  font-family:'Outfit',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  color:rgba(255,255,255,0.72);
+}
+.hero-bar {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--red),transparent);
+  z-index:3;
+  opacity:.35;
+}
+.scroll-down {
+  position:absolute;
+  bottom:32px; left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  color:rgba(255,255,255,0.18);
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  z-index:3;
+  animation:bounce 2s infinite;
+}
+@keyframes bounce {
+  0%,100% { transform:translateX(-50%) translateY(0); }
+  50%      { transform:translateX(-50%) translateY(6px); }
+}
+
+/* ===== SECTION BASE ===== */
+section {
+  padding:96px 24px;
+  position:relative;
+  overflow:hidden;
+}
+.sec-dark  { background:var(--bg); }
+.sec-dark2 { background:var(--bg2); }
+.section-inner { max-width:1140px; margin:0 auto; position:relative; z-index:2; }
+.section-badge {
+  display:inline-block;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:8px;
+}
+.section-num {
+  font-family:'Outfit',sans-serif;
+  font-size:110px;
+  font-weight:800;
+  color:rgba(255,255,255,0.025);
+  line-height:1;
+  margin-bottom:-18px;
+  letter-spacing:-5px;
+  display:block;
+  pointer-events:none;
+}
+.section-title {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(26px,3.5vw,40px);
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:-.5px;
+  margin-bottom:6px;
+}
+.section-line {
+  width:32px; height:2px;
+  background:linear-gradient(90deg,var(--red),var(--gold));
+  border-radius:2px;
+  margin:14px 0 24px;
+}
+.section-text {
+  font-size:15px;
+  line-height:1.85;
+  color:var(--text2);
+  max-width:720px;
+}
+.section-text strong { font-weight:600; color:var(--text); }
+.highlight-box {
+  font-size:15px;
+  line-height:1.75;
+  color:var(--text);
+  padding:18px 22px;
+  border-left:2px solid var(--red);
+  background:var(--red-dim);
+  border-radius:0 10px 10px 0;
+  margin:24px 0;
+  backdrop-filter:blur(10px);
+}
+.highlight-box strong { font-weight:600; color:#fff; }
+
+/* ===== DIAG GRID ===== */
+.diag-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:28px 0;
+}
+.diag-box {
+  text-align:center;
+  padding:24px 14px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  transition:border-color .2s,transform .2s;
+  backdrop-filter:blur(12px);
+}
+.diag-box:hover {
+  border-color:var(--gold-border);
+  transform:translateY(-3px);
+  box-shadow:var(--glow);
+}
+.diag-icon { font-size:26px; margin-bottom:10px; }
+.diag-label {
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:6px;
+}
+.diag-val {
+  font-family:'Outfit',sans-serif;
+  font-size:13px;
+  font-weight:500;
+  color:var(--text2);
+  line-height:1.4;
+}
+
+/* ===== CARDS GRID ===== */
+.cards-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin:28px 0;
+}
+.cards-grid.cols3 { grid-template-columns:repeat(3,1fr); }
+.card {
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-border),transparent);
+}
+.card:hover {
+  border-color:var(--gold-border);
+  transform:translateY(-3px);
+  box-shadow:0 8px 40px rgba(0,0,0,0.4),var(--glow);
+}
+.card-icon {
+  width:36px; height:36px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:12px;
+  font-size:16px;
+  background:var(--gold-dim);
+  border:1px solid var(--gold-border);
+}
+.card-icon.red {
+  background:var(--red-dim);
+  border-color:rgba(196,66,62,0.20);
+}
+.card-title {
+  font-family:'Outfit',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:7px;
+}
+.card-text { font-size:13px; line-height:1.65; color:var(--text2); }
+.card-why {
+  margin-top:10px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--gold);
+}
+.card-why::before { content:'→ '; color:var(--red); font-weight:800; }
+
+/* ===== MONTH BLOCKS ===== */
+.month-blocks {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+  margin:28px 0;
+}
+.month-block {
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:26px 22px;
+  position:relative;
+  overflow:hidden;
+  backdrop-filter:blur(16px);
+  transition:border-color .2s;
+}
+.month-block:hover { border-color:var(--gold-border); }
+.month-block::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; bottom:0;
+  width:2px;
+  background:linear-gradient(180deg,var(--red),var(--gold));
+}
+.month-tag {
+  display:inline-block;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:#fff;
+  background:var(--red);
+  padding:4px 12px;
+  border-radius:4px;
+  margin-bottom:10px;
+}
+.month-tag.m2 { background:#7A6128; }
+.month-tag.m3 {
+  background:transparent;
+  border:1px solid var(--gold-border);
+  color:var(--gold);
+}
+.month-tag.m4 {
+  background:transparent;
+  border:1px solid rgba(99,179,237,.5);
+  color:#63B3ED;
+}
+.month-block.renewal {
+  border-color:rgba(99,179,237,.25);
+  border-style:dashed;
+}
+.month-block.renewal::before {
+  background:linear-gradient(180deg,#63B3ED,var(--gold));
+}
+.renewal-note {
+  font-size:10px;
+  color:rgba(99,179,237,.75);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  display:block;
+}
+.month-title {
+  font-family:'Outfit',sans-serif;
+  font-size:17px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:14px;
+}
+.month-items { list-style:none; }
+.month-items li {
+  font-size:13px;
+  line-height:1.6;
+  color:var(--text2);
+  padding:5px 0 5px 18px;
+  position:relative;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.month-items li:last-child { border-bottom:none; }
+.month-items li::before {
+  content:'◆';
+  position:absolute;
+  left:0; top:7px;
+  color:var(--gold);
+  font-size:6px;
+  opacity:.6;
+}
+
+/* ===== CHECKLIST ===== */
+.ck-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin:16px 0;
+}
+.ck-item {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 14px;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-size:13px;
+  color:var(--text2);
+  transition:border-color .2s,color .2s;
+  backdrop-filter:blur(10px);
+}
+.ck-item:hover { border-color:var(--gold-border); color:var(--text); }
+.ck-dot {
+  width:18px; height:18px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--red),var(--gold));
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ck-dot svg { width:10px; height:10px; }
+
+/* ===== TABLE ===== */
+.tb-wrap {
+  overflow-x:auto;
+  margin:20px 0;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+  background:var(--glass);
+  border-radius:12px;
+  overflow:hidden;
+}
+thead th {
+  background:rgba(255,255,255,0.04);
+  color:var(--text3);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:14px 18px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+}
+tbody td {
+  padding:12px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--text2);
+}
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:rgba(255,255,255,0.02); color:var(--text); }
+.td-v  { font-weight:600; color:var(--gold) !important; }
+.td-vr { font-weight:700; color:var(--gold) !important; font-size:15px; }
+.row-hl td { background:var(--gold-dim) !important; }
+
+/* ===== INVESTMENT ===== */
+.inv-hero {
+  background:var(--glass);
+  border:1px solid var(--gold-border);
+  border-radius:16px;
+  padding:44px;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:32px;
+  backdrop-filter:blur(24px);
+}
+.inv-orb {
+  position:absolute;
+  top:-60px; right:-60px;
+  width:320px; height:320px;
+  background:radial-gradient(circle,rgba(201,169,98,0.10) 0%,transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.inv-label {
+  font-size:9px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:700;
+  margin-bottom:10px;
+}
+.inv-val {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(52px,7vw,72px);
+  font-weight:800;
+  background:linear-gradient(90deg,#fff,var(--gold2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-3px;
+  line-height:1;
+  margin-bottom:8px;
+}
+.inv-val span {
+  font-size:24px;
+  font-weight:300;
+  letter-spacing:0;
+  -webkit-text-fill-color:rgba(238,238,242,0.40);
+}
+.inv-desc {
+  font-size:13px;
+  color:var(--text2);
+  line-height:1.8;
+  max-width:500px;
+  margin-top:10px;
+}
+
+/* ===== ADD TABLE ===== */
+.add-table {
+  width:100%;
+  border-collapse:collapse;
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--glass);
+  border:1px solid var(--border);
+}
+.add-table td {
+  padding:12px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--text2);
+  font-size:13px;
+}
+.add-table td:last-child {
+  text-align:right;
+  font-weight:600;
+  color:var(--gold);
+  white-space:nowrap;
+}
+.add-table tr:last-child td { border-bottom:none; }
+.add-table tr:hover td { background:rgba(255,255,255,0.02); }
+
+/* ===== CONDITIONS ===== */
+.cond-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin:24px 0;
+}
+.cond-card {
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  transition:border-color .2s;
+  backdrop-filter:blur(10px);
+}
+.cond-card:hover { border-color:var(--gold-border); }
+.cond-card-t { font-size:12px; font-weight:600; color:var(--text); margin-bottom:6px; }
+.cond-card-p { font-size:13px; line-height:1.6; color:var(--text2); }
+.cond-card-p strong { color:var(--gold); font-weight:600; }
+
+/* ===== EXCLUSIONS ===== */
+.exc-box {
+  background:var(--glass);
+  border:1px dashed rgba(196,66,62,0.22);
+  border-radius:var(--radius);
+  padding:22px;
+  margin:24px 0;
+  backdrop-filter:blur(10px);
+}
+.exc-box h4 {
+  font-size:9px;
+  font-weight:700;
+  color:var(--red);
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.exc-box ul { list-style:none; }
+.exc-box li {
+  font-size:13px;
+  color:var(--text2);
+  padding:6px 0 6px 20px;
+  position:relative;
+  line-height:1.55;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.exc-box li:last-child { border-bottom:none; }
+.exc-box li::before {
+  content:'✕';
+  position:absolute;
+  left:0; top:8px;
+  color:var(--red);
+  font-size:9px;
+  font-weight:700;
+  opacity:.7;
+}
+.exc-box li strong { color:var(--text); }
+
+/* ===== SIGNATURE ===== */
+.sig-area {
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:36px;
+  margin:32px 0;
+  backdrop-filter:blur(16px);
+}
+.sig-intro {
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.7;
+  margin-bottom:28px;
+  max-width:560px;
+}
+.sig-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  margin-bottom:28px;
+}
+.sig-box { text-align:center; }
+.sig-line { border-bottom:1px solid var(--border2); height:52px; margin-bottom:8px; }
+.sig-label { font-size:12px; color:var(--text2); line-height:1.6; }
+.conf-box {
+  background:rgba(201,169,98,0.04);
+  border:1px solid var(--gold-border);
+  border-radius:8px;
+  padding:14px 18px;
+  font-size:12px;
+  color:var(--text2);
+  line-height:1.65;
+}
+.conf-box strong { color:var(--gold); }
+
+/* ===== HELPERS ===== */
+.sh {
+  font-family:'Outfit',sans-serif;
+  font-size:19px;
+  font-weight:700;
+  color:var(--text);
+  margin:32px 0 14px;
+}
+.sh-sm {
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+  margin:20px 0 10px;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  color:var(--text2);
+  padding:44px 24px;
+  text-align:center;
+  font-size:12px;
+  line-height:2;
+}
+footer strong { color:var(--gold); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:900px) {
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+  .hero-inner {
+    grid-template-columns:1fr;
+    gap:36px;
+    padding:60px 24px 70px;
+  }
+  .hero-overlay {
+    background:linear-gradient(
+      180deg,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.40) 55%,
+      rgba(0,0,0,0.25) 100%
+    );
+  }
+  .hero-card { display:none; }
+  .diag-grid { grid-template-columns:repeat(2,1fr); }
+  .cards-grid.cols3 { grid-template-columns:repeat(2,1fr); }
+  .month-blocks { grid-template-columns:1fr; }
+}
+@media (max-width:600px) {
+  section { padding:64px 16px; }
+  .section-num { font-size:70px; }
+  .diag-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .cards-grid { grid-template-columns:1fr; }
+  .cards-grid.cols3 { grid-template-columns:1fr; }
+  .ck-grid { grid-template-columns:1fr; }
+  .cond-grid { grid-template-columns:1fr; }
+  .sig-grid { grid-template-columns:1fr; gap:28px; }
+  .inv-hero { padding:28px 20px; }
+  .inv-val { font-size:44px; }
+  .hero-title,.hero-title-accent { font-size:36px; }
+  .hero-cliente { font-size:24px; }
+  .hero-actions { flex-direction:column; }
+  .btn-primary,.btn-secondary { justify-content:center; width:100%; }
+  .scroll-down { display:none; }
+  .sig-area { padding:22px 18px; }
+  .month-block { padding:20px 16px; }
+  .add-table td { font-size:12px; padding:10px 12px; }
+  thead th,tbody td { padding:10px 12px; font-size:12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-box"><img src="1.png" alt="Pixel Fluent"></div>
+      <div class="nav-logo-name">PIXEL <span>FLUENT</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#diagnostico">Diagnóstico</a></li>
+      <li><a href="#estrategia">Estratégia</a></li>
+      <li><a href="#plano">Plano</a></li>
+      <li><a href="#entregaveis">Entregáveis</a></li>
+      <li><a href="#investimento">Investimento</a></li>
+      <li><a href="#aceite" class="nav-cta">Aceitar Proposta</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#diagnostico" onclick="closeMenu()">01 · Diagnóstico</a></li>
+    <li><a href="#estrategia"  onclick="closeMenu()">02 · Estratégia</a></li>
+    <li><a href="#plano"       onclick="closeMenu()">03 · Plano Mês a Mês</a></li>
+    <li><a href="#entregaveis" onclick="closeMenu()">04 · Entregáveis</a></li>
+    <li><a href="#investimento" onclick="closeMenu()">05 · Investimento</a></li>
+    <li><a href="#aceite" onclick="closeMenu()" class="nav-cta">Aceitar Proposta</a></li>
+  </ul>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg-wrap">
+    <video class="hero-bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="blob blob-gold hero-blob1 anim1"></div>
+  <div class="blob blob-red  hero-blob2 anim2"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">◆ Proposta Comercial Exclusiva</div>
+      <p class="hero-slogan">"A Joia dos Antepastos"</p>
+      <div class="hero-title">Estratégia &</div>
+      <div class="hero-title-accent">Crescimento</div>
+      <div class="hero-cliente">Buonissimo</div>
+      <div class="hero-line"></div>
+      <p class="hero-desc">Plano estratégico de 3 meses para transformar visualizações em vendas, construir audiência qualificada e posicionar a Buonissimo como a referência premium em antepastos artesanais.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">Conteúdo</span>
+        <span class="hero-pill">Bot WhatsApp</span>
+        <span class="hero-pill">UGC</span>
+        <span class="hero-pill">Landing Page</span>
+        <span class="hero-pill">Parcerias</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#diagnostico" class="btn-primary">Ver Proposta Completa ↓</a>
+        <a href="#aceite" class="btn-secondary">Aceitar &amp; Assinar</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Resumo do Plano</div>
+      <div class="hero-stat">
+        <div class="hero-stat-icon">📅</div>
+        <div>
+          <div class="hero-stat-label">Duração</div>
+          <div class="hero-stat-val">3 meses · Contrato Trimestral</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-icon">💰</div>
+        <div>
+          <div class="hero-stat-label">Investimento</div>
+          <div class="hero-stat-val">R$ 4.500 / mês</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-icon">📸</div>
+        <div>
+          <div class="hero-stat-label">Conteúdo/mês</div>
+          <div class="hero-stat-val">5 vídeos + 7 posts estratégicos</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-icon">🚀</div>
+        <div>
+          <div class="hero-stat-label">Início</div>
+          <div class="hero-stat-val">Até 5 dias úteis após aprovação</div>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-icon">⏰</div>
+        <div>
+          <div class="hero-stat-label">Validade da Proposta</div>
+          <div class="hero-stat-val">15 dias · Abril 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-down">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Scroll
+  </div>
+  <div class="hero-bar"></div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark2">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#07090F"/>
+  </svg>
+</div>
+
+<!-- ===== DIAGNÓSTICO ===== -->
+<section id="diagnostico" class="sec-dark2">
+  <div class="blob blob-gold anim3" style="width:500px;height:500px;top:-150px;right:-100px;opacity:.10;"></div>
+  <div class="section-inner">
+    <span class="section-badge">01 · Diagnóstico</span>
+    <span class="section-num">01</span>
+    <h2 class="section-title">Diagnóstico</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">Onde a Buonissimo está hoje</p>
+    <div class="section-line"></div>
+    <p class="section-text">A Buonissimo tem um produto excepcional — antepastos artesanais posicionados como joias gastronômicas, com fotografia e embalagem de altíssimo nível. O posicionamento <em>"A Joia dos Antepastos"</em> é poderoso e diferenciado. Mas há um problema claro: <strong>muita visualização, pouca conversão</strong>.</p>
+
+    <div class="diag-grid">
+      <div class="diag-box"><div class="diag-icon">👁️</div><div class="diag-label">Visualizações</div><div class="diag-val">Altas — o conteúdo é visto</div></div>
+      <div class="diag-box"><div class="diag-icon">🔻</div><div class="diag-label">Conversão</div><div class="diag-val">Baixa — não gera vendas</div></div>
+      <div class="diag-box"><div class="diag-icon">📢</div><div class="diag-label">Aquisição</div><div class="diag-val">Por indicação — sem escala</div></div>
+      <div class="diag-box"><div class="diag-icon">👤</div><div class="diag-label">Seguidores</div><div class="diag-val">Crescimento lento</div></div>
+    </div>
+
+    <div class="highlight-box"><strong>O produto é uma joia. O marketing precisa estar à altura.</strong> Hoje, as vendas dependem de quem já conhece. A Buonissimo precisa de um sistema que transforme desconhecidos em clientes — e clientes em assinantes recorrentes.</div>
+
+    <h3 class="sh">O que identificamos</h3>
+    <div class="cards-grid">
+      <div class="card"><div class="card-icon red">🎯</div><div class="card-title">Falta Funil de Vendas</div><p class="card-text">O conteúdo gera atenção, mas não há um caminho claro do "vi o post" até o "comprei". Sem landing page, sem catálogo digital, sem automação.</p><div class="card-why">Atenção sem direcionamento é desperdício</div></div>
+      <div class="card"><div class="card-icon">📊</div><div class="card-title">Sem Métricas de Negócio</div><p class="card-text">Sem planilhas, sem comparativos, sem acompanhamento real. Impossível otimizar o que não se mede.</p><div class="card-why">Dados guiam decisões que geram lucro</div></div>
+      <div class="card"><div class="card-icon red">🤖</div><div class="card-title">Atendimento Manual</div><p class="card-text">Cada mensagem no WhatsApp é respondida manualmente. Clientes que chegam fora do horário são perdidos.</p><div class="card-why">Automação captura vendas 24h por dia</div></div>
+      <div class="card"><div class="card-icon">🤝</div><div class="card-title">Sem Parcerias Estratégicas</div><p class="card-text">O antepasto é o par perfeito para vinho, cerveja artesanal, queijos, brunch. Mas sem conexões, essas oportunidades se perdem.</p><div class="card-why">Parcerias abrem mercados novos sem custo</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C480,60 960,0 1440,50 L1440,60 L0,60 Z" fill="#0B0E19"/>
+  </svg>
+</div>
+
+<!-- ===== ESTRATÉGIA ===== -->
+<section id="estrategia" class="sec-dark">
+  <div class="blob blob-red anim1" style="width:600px;height:600px;bottom:-200px;left:-100px;opacity:.09;"></div>
+  <div class="section-inner">
+    <span class="section-badge">02 · Estratégia</span>
+    <span class="section-num">02</span>
+    <h2 class="section-title">Estratégia</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">O que vamos construir</p>
+    <div class="section-line"></div>
+    <p class="section-text">A estratégia se apoia em <strong>seis frentes simultâneas</strong> que resolvem cada uma das dores identificadas. Não é uma ação isolada — é um sistema integrado de vendas.</p>
+
+    <div class="cards-grid cols3" style="margin-top:28px;">
+      <div class="card"><div class="card-icon red">📸</div><div class="card-title">Conteúdo</div><p class="card-text">12 posts/mês (5 vídeos + 7 posts), 3x por semana. Instagram + TikTok.</p><div class="card-why">Frequência gera presença e confiança</div></div>
+      <div class="card"><div class="card-icon">🤖</div><div class="card-title">Bot WhatsApp</div><p class="card-text">Automação de atendimento e vendas. Catálogo, assinatura, direcionamento ao humano.</p><div class="card-why">Vende mesmo quando você dorme</div></div>
+      <div class="card"><div class="card-icon red">🎬</div><div class="card-title">UGC</div><p class="card-text">Conteúdo de criadores reais — degustações, unboxing, receitas com os antepastos.</p><div class="card-why">Prova social converte 4x mais</div></div>
+      <div class="card"><div class="card-icon">🌐</div><div class="card-title">Landing Page</div><p class="card-text">Página de vendas + catálogo digital para envio via WhatsApp e redes. Com oferta do Clube de Assinatura.</p><div class="card-why">Centraliza a conversão em um só lugar</div></div>
+      <div class="card"><div class="card-icon red">🤝</div><div class="card-title">Parcerias</div><p class="card-text">Colaborações com marcas de vinho, cerveja artesanal, queijos. Eventos: Tarde do Brunch, Noite do Vinho.</p><div class="card-why">Novos públicos com custo zero</div></div>
+      <div class="card"><div class="card-icon">📊</div><div class="card-title">Métricas</div><p class="card-text">Planilhas dinâmicas de acompanhamento real do negócio. Comparativo M+3 vs período anterior.</p><div class="card-why">O que se mede, se melhora</div></div>
+    </div>
+
+    <h3 class="sh">Posicionamento — Experiências Gastronômicas</h3>
+    <p class="section-text">A Buonissimo não vende apenas antepastos — vende <strong>experiências gastronômicas</strong>. A estratégia de parcerias abre esse caminho: a Pixel Fluent faz a conexão, prospecta oportunidades e apresenta propostas já filtradas para a Buonissimo avaliar.</p>
+
+    <div class="cards-grid" style="margin-top:20px;">
+      <div class="card"><div class="card-icon">🍷</div><div class="card-title">Noite do Vinho &amp; Antepastos</div><p class="card-text">Parceria com adegas e wine bars para eventos de harmonização. A Buonissimo entra como fornecedora premium + exposição da marca.</p></div>
+      <div class="card"><div class="card-icon red">🥐</div><div class="card-title">Tarde do Brunch</div><p class="card-text">Eventos de brunch em parceria com padarias e cafeterias artesanais. Antepastos como protagonistas da mesa.</p></div>
+      <div class="card"><div class="card-icon">🍺</div><div class="card-title">Cerveja, Pão &amp; Antepasto</div><p class="card-text">Colaboração com cervejarias artesanais para criar combos e experiências de degustação.</p></div>
+      <div class="card"><div class="card-icon red">🧀</div><div class="card-title">Queijos &amp; Antepastos</div><p class="card-text">Parceria com queijarias e empórios para kits premium e experiências sensoriais pagas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark2">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,50 C360,0 1080,60 1440,20 L1440,60 L0,60 Z" fill="#07090F"/>
+  </svg>
+</div>
+
+<!-- ===== PLANO MÊS A MÊS ===== -->
+<section id="plano" class="sec-dark2">
+  <div class="blob blob-blue anim2" style="width:550px;height:550px;top:-100px;right:-80px;opacity:.12;"></div>
+  <div class="section-inner">
+    <span class="section-badge">03 · Execução</span>
+    <span class="section-num">03</span>
+    <h2 class="section-title">Plano Mês a Mês</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">4 meses de execução estratégica</p>
+    <div class="section-line"></div>
+
+    <div class="month-blocks">
+      <div class="month-block">
+        <span class="month-tag">Mês 1</span>
+        <div class="month-title">Fundação &amp; Estrutura</div>
+        <ul class="month-items">
+          <li>Diagnóstico completo e análise de métricas e posicionamento digital</li>
+          <li>Criação de planilhas de acompanhamento e controle de resultados</li>
+          <li>Configuração e ativação de chatbot (WhatsApp Business)</li>
+          <li>Organização e estruturação do catálogo de produtos/serviços</li>
+          <li>Criação de landing page otimizada para conversão</li>
+          <li>Produção de 5 (cinco) vídeos e 7 (sete) posts para redes sociais</li>
+        </ul>
+      </div>
+      <div class="month-block">
+        <span class="month-tag m2">Mês 2</span>
+        <div class="month-title">Crescimento &amp; Parcerias</div>
+        <ul class="month-items">
+          <li>Produção de 5 (cinco) vídeos e 7 (sete) posts para redes sociais</li>
+          <li>Otimização do chatbot com base nos dados coletados no Mês 1</li>
+          <li>Relatórios semanais de desempenho e alcance das ações</li>
+          <li>Ativação formal das parcerias estratégicas mapeadas</li>
+          <li>Atualização e otimização da landing page</li>
+          <li>Mapeamento e prospecção inicial de parcerias estratégicas</li>
+          <li>Início das ações de UGC (User Generated Content)</li>
+        </ul>
+      </div>
+      <div class="month-block">
+        <span class="month-tag m3">Mês 3</span>
+        <div class="month-title">Escala &amp; Otimização</div>
+        <ul class="month-items">
+          <li>Produção de 5 (cinco) vídeos e 7 (sete) posts para redes sociais</li>
+          <li>Otimizações baseadas em análise aprofundada de dados e métricas</li>
+          <li>Relatório completo de performance acumulada (Meses 1 a 3) — base para proposta de renovação</li>
+          <li>Produção contínua de conteúdos UGC</li>
+          <li>Revisão e otimização estratégica com base nos resultados acumulados</li>
+        </ul>
+      </div>
+      <div class="month-block renewal">
+        <span class="month-tag m4">Mês 4</span>
+        <span class="renewal-note">Escopo de Renovação — sujeito à adesão conforme Cláusula 7</span>
+        <div class="month-title">Consolidação &amp; Expansão</div>
+        <ul class="month-items">
+          <li>Intensificação de ações com foco em aumento de vendas e conversão</li>
+          <li>Otimização máxima de conteúdos e funis de conversão</li>
+          <li>Análise avançada de performance e ROI das ações executadas</li>
+          <li>Consolidação das parcerias estratégicas ativas</li>
+          <li>Ajustes estratégicos orientados pelos resultados obtidos</li>
+          <li>Elaboração de plano de continuidade e roadmap de escala para etapas seguintes</li>
+          <li>Apresentação de proposta de renovação para novo ciclo contratual</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C480,60 960,0 1440,40 L1440,60 L0,60 Z" fill="#0B0E19"/>
+  </svg>
+</div>
+
+<!-- ===== ENTREGÁVEIS ===== -->
+<section id="entregaveis" class="sec-dark">
+  <div class="blob blob-gold anim1" style="width:450px;height:450px;bottom:-100px;right:-80px;opacity:.09;"></div>
+  <div class="section-inner">
+    <span class="section-badge">04 · Entregáveis</span>
+    <span class="section-num">04</span>
+    <h2 class="section-title">Entregáveis</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">Tudo que você recebe no trimestre</p>
+    <div class="section-line"></div>
+
+    <p class="sh-sm" style="margin-top:0;">Entregáveis — Mensal (Recorrente)</p>
+    <div class="ck-grid">
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>5 vídeos (Reels) captados e editados</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>7 posts estratégicos com design</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Postagem no Instagram e TikTok</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Manutenção do bot WhatsApp</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Acompanhamento com planilhas</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Prospecção de parcerias</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Atualização de catálogo e LP</div>
+      <div class="ck-item"><span class="ck-dot"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Relatório mensal com métricas</div>
+    </div>
+
+    <h3 class="sh">Conteúdo — Distribuição Semanal</h3>
+    <div class="tb-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:10%;">Dia</th>
+            <th style="width:18%;">Formato</th>
+            <th style="width:38%;">Conteúdo</th>
+            <th style="width:34%;">Por que funciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Seg</strong></td><td>Imagem/Carrossel</td><td>Produto com preço + apelo emocional</td><td>Conversão direta no início da semana</td></tr>
+          <tr><td><strong>Qua</strong></td><td>Vídeo/Reels</td><td>UGC, degustação, bastidores, receita</td><td>Prova social + alcance via algoritmo</td></tr>
+          <tr><td><strong>Sex</strong></td><td>Imagem/Carrossel</td><td>Harmonização, dica, branding</td><td>Posicionamento + desejo para o fim de semana</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text3);margin-top:6px;">* Nos meses com 5 semanas, o quarto post semanal entra como bônus estratégico.</p>
+
+    <h3 class="sh">Clube Buonissimo — Assinatura</h3>
+    <p class="section-text">A landing page será construída com foco especial no <strong>Clube de Assinatura Buonissimo</strong>: uma oferta mensal de produtos selecionados enviados diretamente para o cliente. É a estratégia mais poderosa para gerar <strong>receita recorrente e previsível</strong> — transformando compradores ocasionais em assinantes fiéis.</p>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark2">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C300,0 1100,60 1440,20 L1440,60 L0,60 Z" fill="#07090F"/>
+  </svg>
+</div>
+
+<!-- ===== INVESTIMENTO ===== -->
+<section id="investimento" class="sec-dark2">
+  <div class="blob blob-gold anim2" style="width:600px;height:600px;top:-150px;left:-150px;opacity:.10;"></div>
+  <div class="section-inner">
+    <span class="section-badge">05 · Investimento</span>
+    <span class="section-num">05</span>
+    <h2 class="section-title">Investimento</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">Valores, adicionais e condições</p>
+    <div class="section-line"></div>
+
+    <div class="inv-hero">
+      <div class="inv-orb"></div>
+      <div class="inv-label">Contrato trimestral — 3 meses</div>
+      <div class="inv-val">R$ 4.500<span>/mês</span></div>
+      <p class="inv-desc">Conteúdo (5 vídeos + 7 posts) · Bot WhatsApp · Landing Page · Catálogo · Planilhas · Parcerias · UGC · Relatórios mensais.</p>
+    </div>
+
+    <h3 class="sh">O que está incluso no mensal</h3>
+    <div class="tb-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60%;">Entrega</th>
+            <th style="width:20%;">Qtd/mês</th>
+            <th style="width:20%;text-align:right;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Captação, edição e postagem de vídeos (Reels)</td><td>5</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Posts estratégicos com design (feed/carrossel)</td><td>7</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Manutenção e acompanhamento do bot WhatsApp</td><td>Contínuo</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Acompanhamento com planilhas e métricas reais</td><td>Contínuo</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Prospecção de parcerias e posicionamento estratégico</td><td>Contínuo</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Atualização de catálogo e landing page</td><td>Contínuo</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Estratégia UGC (briefing e direção de criadores)</td><td>Contínuo</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+          <tr><td>Relatório mensal de performance e vendas</td><td>1</td><td style="text-align:right;" class="td-v">Incluso</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sh">Adicionais Opcionais</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px;">Serviços que podem ser contratados separadamente conforme a necessidade da Buonissimo:</p>
+    <div class="tb-wrap">
+      <table class="add-table">
+        <tbody>
+          <tr><td>Landing page e catálogo adicional</td><td>R$ 800</td></tr>
+          <tr><td>Design de cardápio, cartão postal, merchandising ou branding</td><td>R$ 600</td></tr>
+          <tr><td>Vídeo adicional (Reels) — captação + edição</td><td>R$ 300</td></tr>
+          <tr><td>Captação de vídeo avulsa</td><td>R$ 100</td></tr>
+          <tr><td>Edição de vídeo avulsa</td><td>R$ 100</td></tr>
+          <tr><td>Sistema personalizado para o negócio</td><td>A consultar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- wave -->
+<div class="wave sec-dark">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,10 C600,70 900,0 1440,50 L1440,60 L0,60 Z" fill="#0B0E19"/>
+  </svg>
+</div>
+
+<!-- ===== CONDIÇÕES & ACEITE ===== -->
+<section id="aceite" class="sec-dark">
+  <div class="blob blob-red anim3" style="width:500px;height:500px;bottom:-100px;right:-80px;opacity:.08;"></div>
+  <div class="section-inner">
+    <span class="section-badge">06 · Condições &amp; Aceite</span>
+    <span class="section-num">06</span>
+    <h2 class="section-title">Condições &amp; Aceite</h2>
+    <p class="section-badge" style="color:var(--text2);text-transform:none;font-size:12px;letter-spacing:0;font-weight:400;">Transparência e próximos passos</p>
+    <div class="section-line"></div>
+
+    <div class="exc-box">
+      <h4>O que não está incluso</h4>
+      <ul>
+        <li><strong>Investimento em mídia paga</strong> — valores para impulsionamento e anúncios (Meta Ads, Google Ads)</li>
+        <li><strong>Produção de materiais físicos</strong> — impressão de banners, flyers, cardápios e materiais impressos</li>
+        <li><strong>Brindes e merchandising</strong> — produção de brindes promocionais e embalagens especiais</li>
+        <li><strong>Custos de eventos</strong> — ingressos, locação de espaço, decoração e logística de eventos</li>
+        <li><strong>Produções extras</strong> — conteúdos além dos 12 posts mensais (disponíveis como adicional)</li>
+        <li><strong>Cachê de influenciadores</strong> — pagamento a influenciadores ou criadores que cobrem pela produção</li>
+      </ul>
+    </div>
+
+    <h3 class="sh">Condições Comerciais</h3>
+    <div class="cond-grid">
+      <div class="cond-card"><div class="cond-card-t">📄 Validade</div><p class="cond-card-p">Proposta válida por <strong>15 dias</strong> a partir da data de emissão (Abril 2026).</p></div>
+      <div class="cond-card"><div class="cond-card-t">💳 Pagamento</div><p class="cond-card-p">Mensal, via PIX ou transferência bancária, com vencimento até o <strong>dia 5 de cada mês</strong>.</p></div>
+      <div class="cond-card"><div class="cond-card-t">📅 Contrato</div><p class="cond-card-p">Trimestral (3 meses). Renovável por igual período mediante acordo entre as partes.</p></div>
+      <div class="cond-card"><div class="cond-card-t">🔄 Cancelamento</div><p class="cond-card-p">Após o trimestre, com <strong>30 dias de antecedência</strong>. Materiais produzidos são entregues ao cliente.</p></div>
+    </div>
+
+    <h3 class="sh">Resumo Final</h3>
+    <div class="tb-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:55%;">Descrição</th>
+            <th style="width:20%;">Frequência</th>
+            <th style="width:25%;text-align:right;">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-hl">
+            <td><strong>Operação completa (conteúdo, bot, LP, parcerias, métricas)</strong></td>
+            <td><strong>Mensal</strong></td>
+            <td style="text-align:right;" class="td-vr"><strong>R$ 4.500</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sig-area">
+      <p class="sig-intro">Contrato trimestral. Mensalidade de R$&nbsp;4.500, vencimento todo dia 5. Proposta válida por 15 dias. Início em até 5 dias úteis após aprovação.</p>
+      <div class="sig-grid">
+        <div class="sig-box">
+          <div class="sig-line"></div>
+          <p class="sig-label"><strong>Buonissimo</strong><br>Nome completo · CPF/CNPJ · Data</p>
+        </div>
+        <div class="sig-box">
+          <div class="sig-line"></div>
+          <p class="sig-label"><strong>Pixel Fluent</strong><br>Responsável · Data</p>
+        </div>
+      </div>
+      <div class="conf-box"><strong>Documento Confidencial.</strong> Este material contém informações estratégicas e comerciais proprietárias da Pixel Fluent. A reprodução, distribuição ou divulgação total ou parcial sem autorização prévia é proibida. Todos os direitos reservados.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <img src="1.png" alt="Pixel Fluent" style="width:36px;height:36px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 14px;">
+  <strong>Pixel Fluent</strong><br>
+  <span style="opacity:.3;font-size:11px;letter-spacing:.5px;">Proposta Buonissimo · Abril 2026 · Documento Confidencial</span>
+</footer>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+  function closeMenu()  { document.getElementById('mobileMenu').classList.remove('open'); }
+
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('mobileMenu');
+    const btn  = document.querySelector('.hamburger');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  // Active nav highlight on scroll
+  const sections  = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('.nav-links a');
+  const observer  = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          if (link.getAttribute('href') === '#' + entry.target.id) link.style.color = 'var(--gold2)';
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
